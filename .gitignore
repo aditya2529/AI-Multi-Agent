@@ -1,0 +1,94 @@
+# ─── AI Multi-Agent Scrum Team — gitignore ──────────────────────────────────
+# This repo tracks ONLY the AI Scrum Team agent definitions + demo assets.
+# Everything else (AI Workforce platform code, demos, secrets) is ignored.
+
+# ── Secrets & local config ──
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+vault-tokens/
+security/keys/
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+.coverage
+.coverage_report.json
+coverage.xml
+htmlcov/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# ── Node / Frontend ──
+node_modules/
+.next/
+out/
+npm-debug.log*
+*.log
+
+# ── Docker / Terraform ──
+*.tar
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+# ── IDE / OS ──
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Generated artifacts ──
+artifacts/
+.langfuse/
+
+# ── Repo-specific: ignore broader AI Workforce platform code ──
+# This repo is for the AI Scrum Team only. Other code lives in its own home.
+orchestrator/
+services/
+gateway/
+memory-layer/
+monitoring/
+infrastructure/
+ci-cd/
+sdk/
+tests/
+docs/
+config/
+dashboard/
+scripts/
+security/
+
+# Ignore platform-level build files
+alembic.ini
+docker-compose.yml
+pyproject.toml
+
+# Local Claude Code state (keep agent definitions, ignore local settings)
+.claude/settings.local.json
+
+# ── KEPT IN REPO ──
+# .claude/agents/      ← the 8 AI teammates
+# demo-assets/         ← director pitch, slide, demo evidence
+# README.md            ← repo overview
