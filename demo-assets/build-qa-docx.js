@@ -227,6 +227,124 @@ const doc = new Document({
 
       divider(),
 
+      // ── Section 3: Citi Enterprise Adoption ──
+      heading("Section 3: Bringing This Into Citi (Enterprise Adoption)", HeadingLevel.HEADING_2),
+
+      // Q20
+      question(20, "This was built on my personal laptop. How can it work inside Citi?"),
+
+      new Paragraph({
+        children: [new TextRun({ text: "Think of it like a recipe book.", bold: true, size: 26, color: "1F3864" })],
+        spacing: { before: 100, after: 120 },
+        indent: { left: 240 },
+      }),
+
+      answer("I wrote a recipe book at home — how to bake a cake, step by step. The recipe book is just words on paper. There's nothing dangerous or secret in it."),
+      answer("Now I want to bake cakes in Citi's kitchen."),
+
+      new Paragraph({
+        children: [new TextRun({ text: "What moves to Citi:", bold: true, size: 22, color: "2E7D32" })],
+        spacing: { before: 160, after: 80 },
+        indent: { left: 240 },
+      }),
+      bullet("The recipe book (the agent .md files) — just plain English instructions"),
+
+      new Paragraph({
+        children: [new TextRun({ text: "What stays out of Citi:", bold: true, size: 22, color: "C0392B" })],
+        spacing: { before: 160, after: 80 },
+        indent: { left: 240 },
+      }),
+      bullet("My home oven (my personal laptop)"),
+      bullet("My personal ingredients (my Claude account)"),
+
+      new Paragraph({
+        children: [new TextRun({ text: "What Citi provides:", bold: true, size: 22, color: "1F3864" })],
+        spacing: { before: 160, after: 80 },
+        indent: { left: 240 },
+      }),
+      bullet("Citi's own oven (their approved AI vendor)"),
+      bullet("Citi's own kitchen (their secure network)"),
+      bullet("Citi's own ingredients (their code, their data)"),
+
+      new Paragraph({
+        children: [new TextRun({ text: "Why Citi won't worry:", bold: true, size: 24, color: "1F3864" })],
+        spacing: { before: 200, after: 100 },
+        indent: { left: 240 },
+      }),
+      bullet("Will Citi data leak out? → No. Everything runs inside their network."),
+      bullet("Did I copy any Citi code? → No. The recipe book has zero Citi content."),
+      bullet("Is this Anthropic-only? → No. Recipes work with any AI brand Citi approves."),
+      bullet("What if AI vendor changes? → Swap the vendor. The recipes still work."),
+
+      answer("Bottom line: ZERO new risk to Citi. The framework is just words.", { run: { italics: true, color: "2E7D32", bold: true } }),
+
+      // Q21
+      question(21, "How do I actually convince Citi to use this?"),
+
+      new Paragraph({
+        children: [new TextRun({ text: "Move slowly. Banks hate fast.", bold: true, size: 26, color: "1F3864" })],
+        spacing: { before: 100, after: 120 },
+        indent: { left: 240 },
+      }),
+
+      // Step 1
+      new Paragraph({
+        children: [new TextRun({ text: "Step 1 — Get Permission First", bold: true, size: 24, color: "1F3864" })],
+        spacing: { before: 200, after: 100 },
+      }),
+      answer("Talk to 3 teams BEFORE writing any code:"),
+      bullet("InfoSec — \"Is this safe?\""),
+      bullet("AI Governance — \"Is this allowed?\""),
+      bullet("Compliance — \"Will regulators be okay?\""),
+      answer("If any of them say no → stop. Don't fight. Find another use case.", { run: { italics: true } }),
+
+      // Step 2
+      new Paragraph({
+        children: [new TextRun({ text: "Step 2 — Pick The Smallest, Safest Pilot", bold: true, size: 24, color: "1F3864" })],
+        spacing: { before: 200, after: 100 },
+      }),
+      answer("Don't start with: customer apps, trading systems, payment systems."),
+      answer("Do start with: internal docs, test generation, dev tooling."),
+      answer("Why? If it goes wrong, nobody important gets hurt.", { run: { italics: true } }),
+
+      // Step 3
+      new Paragraph({
+        children: [new TextRun({ text: "Step 3 — Measure 4 Numbers For 1 Sprint", bold: true, size: 24, color: "1F3864" })],
+        spacing: { before: 200, after: 100 },
+      }),
+      bullet("Throughput — How many stories did the team finish?"),
+      bullet("Bugs — Did defects go up or down?"),
+      bullet("Coordination time — Did meetings reduce?"),
+      bullet("Team happiness — Do devs like it or hate it?"),
+      answer("Real numbers beat marketing slides.", { run: { italics: true, bold: true } }),
+
+      // Step 4
+      new Paragraph({
+        children: [new TextRun({ text: "Step 4 — Answer Objections Before They Ask", bold: true, size: 24, color: "1F3864" })],
+        spacing: { before: 200, after: 100 },
+      }),
+      bullet("\"This will replace engineers\" → No. Humans approve every line. AI is the assistant, not the boss."),
+      bullet("\"AI makes mistakes\" → Yes, that's why we review. Same as junior dev code today."),
+      bullet("\"Regulators won't allow it\" → Regulators want explainability + human approval — both are built in."),
+      bullet("\"It costs money\" → Less than one team coffee subscription per developer per month."),
+      bullet("\"What if the AI company shuts down?\" → Files are portable. Swap to any other AI vendor in a day."),
+
+      // The one-liner
+      new Paragraph({
+        children: [new TextRun({ text: "Your one-liner for the director:", bold: true, size: 24, color: "C0392B" })],
+        spacing: { before: 240, after: 100 },
+      }),
+      new Paragraph({
+        children: [new TextRun({
+          text: "\"Same engineers. Same controls. Same compliance. 20-30% more work done — because AI handles the boring 40% so humans can focus on judgment.\"",
+          italics: true, size: 22, color: "404040",
+        })],
+        indent: { left: 360 },
+        spacing: { after: 280 },
+      }),
+
+      divider(),
+
       // ── Closing ──
       heading("Closing Thought", HeadingLevel.HEADING_2),
       new Paragraph({
