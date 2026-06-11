@@ -65,16 +65,30 @@ artifacts/
 
 # ── Repo-specific: ignore broader AI Workforce platform code ──
 # This repo is for the AI Scrum Team only. Other code lives in its own home.
-orchestrator/
+# NOTE: orchestrator/ and docs/ use the star-form so we can re-include the
+# guard_rails subsystem below (gitignore rule: a child cannot be re-included
+# if its parent directory is excluded; using `dir/*` keeps the parent visible
+# while ignoring its contents by default).
+orchestrator/*
 services/
 gateway/
-memory-layer/
+# memory-layer uses the star-form chain so the guard-rails audit migration
+# (005) can be re-included below — a child can't be un-ignored if its parent
+# directory is excluded outright.
+memory-layer/*
+!memory-layer/postgres/
+memory-layer/postgres/*
+!memory-layer/postgres/migrations/
+memory-layer/postgres/migrations/*
+!memory-layer/postgres/migrations/versions/
+memory-layer/postgres/migrations/versions/*
+!memory-layer/postgres/migrations/versions/*005_guard_rail_events.py
 monitoring/
 infrastructure/
 ci-cd/
 sdk/
 tests/
-docs/
+docs/*
 config/
 dashboard/
 scripts/
@@ -88,7 +102,22 @@ pyproject.toml
 # Local Claude Code state (keep agent definitions, ignore local settings)
 .claude/settings.local.json
 
+# ── Guard Rails subsystem — TRACKED for SOC2 audit trail ──
+# Security-critical code lives in git so changes are reviewable and the
+# audit trail is queryable. Scope is intentionally narrow: only the
+# guard_rails module, its ADRs, and the eval set.
+!orchestrator/guard_rails/
+!orchestrator/guard_rails/**
+# Re-ignore bytecode inside the re-included subtree (the ! above would
+# otherwise override the global __pycache__/ rule — last match wins).
+orchestrator/guard_rails/**/__pycache__/
+!docs/adr-007-canary-and-pydantic-output.md
+!docs/adr-008-rag-sanitization.md
+!docs/adr-009-cross-agent-trust-boundary.md
+
 # ── KEPT IN REPO ──
-# .claude/agents/      ← the 8 AI teammates
-# demo-assets/         ← director pitch, slide, demo evidence
-# README.md            ← repo overview
+# .claude/agents/                    ← the 8 AI teammates
+# demo-assets/                       ← director pitch, slide, demo evidence
+# orchestrator/guard_rails/          ← guard rails subsystem (security audit trail)
+# docs/adr-007/008/009-*.md          ← architecture decision records
+# README.md                          ← repo overview
