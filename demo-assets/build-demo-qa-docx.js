@@ -103,7 +103,7 @@ const qas = [
   { n: 18, q: "Are you storing prompts permanently?",
     a: "No. Anthropic's ephemeral cache is 5 minutes. Our internal logs retain prompt metadata (length, tokens) but redact PII. Full prompts are not persisted." },
   { n: 19, q: "Can a malicious user manipulate an AI agent?",
-    a: "We have input validation at the JWT middleware, content-sanity checks at agent boundaries, and Sneha (Security agent) explicitly looks for prompt injection patterns. It's not bulletproof — no AI system is — but we follow OWASP LLM Top-10." },
+    a: "This is now a core strength — see Section J for the full story. In short: a 7-layer guard-rail system blocks prompt injection before it ever reaches an agent. Layers 1-3 (a deterministic input sanitizer, a Haiku-based injection classifier, and data-not-instructions input wrapping) are live and committed; we follow the OWASP LLM Top-10. No AI system is bulletproof, but attacks are blocked cheaply — before they cost a single token — and every block is logged per tenant." },
 
   // Section D — Quality
   { section: "D. Quality and Reliability" },
@@ -182,6 +182,23 @@ const qas = [
     a: "Three layers: (1) Short-term: active sprint state in Redis. (2) Episodic: every past agent decision logged in PostgreSQL with full audit trail. (3) Semantic: past learnings indexed in Chroma for similarity search. Together this means Priya can recall similar past stories, Arnav can recall past architecture decisions, and Sneha can recall past security findings." },
   { n: 49, q: "Can the agents read the client's existing codebase?",
     a: "Not yet — that's a Phase 2 feature, about 1-2 weeks of work. The infrastructure (Chroma + embeddings + retrieval) is built and proven on past sprint memory. Extending it to index a client's full codebase and Confluence/Notion docs is a configuration task, not a new architecture. We'll do it when a client requires it." },
+
+  // Section J — Guard Rails (AI Safety & Prompt Injection Defense)
+  { section: "J. Guard Rails — AI Safety & Prompt Injection Defense" },
+  { n: 50, q: "What stops someone from hijacking your AI agents with a malicious prompt?",
+    a: "A 7-layer guard-rail system. Before any customer text reaches an agent, it crosses three active gates: (1) a deterministic sanitizer that strips hidden characters, oversized payloads, and fake system tags — runs in microseconds, costs nothing; (2) a Haiku-based injection classifier that scores how likely the text is an attack and blocks anything scoring 85 or above; (3) every input is wrapped in tags the agents are trained to treat as data, never as instructions. Layers 1-3 are live and committed today." },
+  { n: 51, q: "Doesn't all this checking make it slow or expensive?",
+    a: "No — it's the opposite. Layer 1 is pure Python: microseconds, zero AI cost. Layer 2 uses Claude Haiku, our cheapest model, at a fraction of a cent per check. Blocked attacks never reach Opus, so an attacker physically cannot run up your AI bill by spamming you. The guard rails save money under attack rather than costing it." },
+  { n: 52, q: "How do you know the guard rails actually work?",
+    a: "Three forms of proof. We hold a frozen benchmark of 100 cases — 50 real attacks and 50 benign-but-security-flavoured stories — that the classifier is measured against, with a target of catching 95%+ of attacks at under 2% false alarms. Our security agent Sneha ran 25 fresh attacks it had never seen — all blocked. Our reviewer Raj scored the implementation 96 out of 100. And every block is recorded in an audit log." },
+  { n: 53, q: "What happens if the safety classifier itself goes down?",
+    a: "It fails closed in production — if the classifier can't reach a verdict, the request is blocked, not waved through. In development it fails open so engineers aren't slowed down. This is a deliberate, configurable policy, not an accident." },
+  { n: 54, q: "Can one tenant's attack affect another tenant?",
+    a: "No. Every guard-rail check carries the tenant_id — including the classifier's prompt-cache key, the same isolation discipline that protects the rest of the platform. An attack against one customer is detected, blocked, and logged strictly within that customer's scope." },
+  { n: 55, q: "Do you store the malicious input you block? Isn't that itself a data risk?",
+    a: "We store only a SHA-256 fingerprint of blocked input — never the raw text. The audit log proves a decision was made about a specific input without ever retaining the input itself. That's a deliberate choice for GDPR and SOC2: full audit trail, zero sensitive-payload retention." },
+  { n: 56, q: "Is the guard-rail work fully finished?",
+    a: "Four of seven layers are live and committed: the input sanitizer, the injection classifier, the data-not-instructions wrapper, and the audit trail with its dashboard tile. The remaining three — output validation with canary tokens, sanitizing the AI's own memory retrieval, and agent-to-agent trust boundaries — are fully designed as formal ADR documents and scheduled for the next two sprints. We built the highest-value layers first, on purpose." },
 ];
 
 // ─── Build children array ────────────────────────────────────────────────────
@@ -200,7 +217,7 @@ const children = [
   }),
   new Paragraph({
     children: [new TextRun({
-      text: "AI Multi-Agent Scrum Team Platform   |   Updated May 16, 2026",
+      text: "AI Multi-Agent Scrum Team Platform   |   Updated June 11, 2026",
       color: "808080", size: 20,
     })],
     spacing: { after: 280 },
