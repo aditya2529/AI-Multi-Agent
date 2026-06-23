@@ -220,6 +220,129 @@ slide.addText(
   }
 );
 
+// ════════════════════════════════════════════════════════════════════════════
+// SLIDE 2 — Guard Rails (AI safety / prompt-injection defense)
+// ════════════════════════════════════════════════════════════════════════════
+const GREEN = "2E7D32";   // "LIVE" status tag
+const AMBER = "B26A00";   // "DESIGNED" status tag
+
+const s2 = pres.addSlide();
+s2.background = { color: WHITE };
+
+// Title block
+s2.addText("Guard Rails — Built-In AI Safety", {
+  x: 0.5, y: 0.35, w: 11.0, h: 0.7,
+  fontFace: "Georgia", fontSize: 36, bold: true, color: NAVY, margin: 0,
+});
+s2.addText("Attacks blocked before they cost a token.", {
+  x: 0.5, y: 1.05, w: 11.0, h: 0.4,
+  fontFace: "Calibri", fontSize: 18, italic: true, color: MUTED, margin: 0,
+});
+
+// ─── LEFT COLUMN — the 7 layers ──────────────────────────────────────────────
+s2.addText("THE 7 LAYERS", {
+  x: 0.5, y: 1.7, w: 4.0, h: 0.3,
+  fontFace: "Calibri", fontSize: 12, bold: true, color: ACCENT, charSpacing: 2,
+});
+
+const layers = [
+  { n: "L1", name: "Input sanitizer",            desc: "strips hidden characters, fake tags, oversized payloads — no AI, $0", status: "LIVE" },
+  { n: "L2", name: "Injection classifier",       desc: "Haiku scores every input; blocks attacks — pennies per check",       status: "LIVE" },
+  { n: "L3", name: "Data-not-instructions wrap", desc: "agents treat customer text as data, never as orders",                status: "LIVE" },
+  { n: "L4", name: "Output validation + canary", desc: "catches leaks in the AI's own output",                               status: "DESIGNED" },
+  { n: "L5", name: "Memory sanitization",        desc: "cleans what agents recall from memory",                              status: "DESIGNED" },
+  { n: "L6", name: "Agent-to-agent trust",       desc: "one hijacked agent can't infect the next",                          status: "DESIGNED" },
+  { n: "L7", name: "Audit log + dashboard",      desc: "every block recorded per tenant — SOC2-ready",                       status: "LIVE" },
+];
+
+const rowY0 = 2.1;
+const rowH2 = 0.62;
+layers.forEach((L, i) => {
+  const y = rowY0 + i * rowH2;
+  const live = L.status === "LIVE";
+  // number badge
+  s2.addShape(pres.ShapeType.roundRect, {
+    x: 0.5, y: y, w: 0.6, h: 0.5,
+    fill: { color: live ? NAVY : ICE }, line: { color: live ? NAVY : ICE }, rectRadius: 0.06,
+  });
+  s2.addText(L.n, {
+    x: 0.5, y: y, w: 0.6, h: 0.5,
+    fontFace: "Calibri", fontSize: 14, bold: true, color: live ? WHITE : NAVY,
+    align: "center", valign: "middle", margin: 0,
+  });
+  // name + one-line description
+  s2.addText(
+    [
+      { text: L.name + "  ", options: { bold: true, color: NAVY, fontSize: 13 } },
+      { text: L.desc, options: { color: MUTED, fontSize: 11 } },
+    ],
+    { x: 1.25, y: y, w: 5.4, h: 0.5, fontFace: "Calibri", valign: "middle", margin: 0 }
+  );
+  // status tag
+  s2.addText(L.status, {
+    x: 6.7, y: y, w: 1.0, h: 0.5,
+    fontFace: "Calibri", fontSize: 10, bold: true, color: live ? GREEN : AMBER,
+    align: "center", valign: "middle", margin: 0,
+  });
+});
+
+// ─── RIGHT COLUMN — the proof ────────────────────────────────────────────────
+s2.addText("THE PROOF", {
+  x: 8.0, y: 1.7, w: 4.8, h: 0.3,
+  fontFace: "Calibri", fontSize: 12, bold: true, color: ACCENT, charSpacing: 2,
+});
+
+// Big stat callout
+s2.addShape(pres.ShapeType.roundRect, {
+  x: 8.0, y: 2.1, w: 4.8, h: 1.15,
+  fill: { color: ICE }, line: { color: ICE }, rectRadius: 0.1,
+});
+s2.addText("25 / 25", {
+  x: 8.0, y: 2.15, w: 4.8, h: 0.65,
+  fontFace: "Georgia", fontSize: 34, bold: true, color: NAVY,
+  align: "center", valign: "middle", margin: 0,
+});
+s2.addText("fresh attacks blocked in security testing", {
+  x: 8.0, y: 2.8, w: 4.8, h: 0.4,
+  fontFace: "Calibri", fontSize: 12, italic: true, color: NAVY,
+  align: "center", valign: "middle", margin: 0,
+});
+
+// Proof checklist
+s2.addText(
+  [
+    { text: "✓ 4 of 7 layers live", options: { bold: true, color: NAVY } },
+    { text: "  (3 more designed)\n", options: { color: MUTED } },
+    { text: "✓ Raj code review: 96 / 100\n", options: { color: TEXT } },
+    { text: "✓ Frozen 100-case attack benchmark\n", options: { color: TEXT } },
+    { text: "✓ Every block logged per tenant", options: { color: TEXT } },
+  ],
+  { x: 8.05, y: 3.45, w: 4.75, h: 1.5, fontFace: "Calibri", fontSize: 13, lineSpacingMultiple: 1.35, margin: 0 }
+);
+
+// Why it matters box
+s2.addShape(pres.ShapeType.roundRect, {
+  x: 8.0, y: 5.1, w: 4.8, h: 1.45,
+  fill: { color: NAVY }, line: { color: NAVY }, rectRadius: 0.1,
+});
+s2.addText("WHY IT MATTERS", {
+  x: 8.2, y: 5.2, w: 4.4, h: 0.3,
+  fontFace: "Calibri", fontSize: 11, bold: true, color: ICE, charSpacing: 2,
+});
+s2.addText(
+  "A malicious request is rejected before it ever reaches a paid model — so an attacker can't leak data, hijack an agent, or run up your bill.",
+  { x: 8.2, y: 5.55, w: 4.4, h: 0.9, fontFace: "Calibri", fontSize: 12, color: WHITE, margin: 0 }
+);
+
+// ─── Footer tagline ──────────────────────────────────────────────────────────
+s2.addText(
+  [
+    { text: "3 gates before a token is spent · 2 more before agents trust each other · ", options: { color: MUTED } },
+    { text: "every attempt logged.", options: { color: NAVY, bold: true } },
+  ],
+  { x: 0.5, y: 6.85, w: 12.3, h: 0.4, fontFace: "Calibri", fontSize: 12, italic: true, align: "center", margin: 0 }
+);
+
 // Write
 pres.writeFile({ fileName: "director-slide.pptx" })
-  .then((name) => console.log(`✓ Wrote ${name}`));
+  .then((name) => console.log(`✓ Wrote ${name} (2 slides)`));
